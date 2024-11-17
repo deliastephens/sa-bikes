@@ -1,7 +1,0 @@
-#+TITLE: Sitemap for project org-site:main
-
-- [[file:index.org][Index]]
-- [[file:rides.org][Rides]]
-- [[file:sitemap.org][Sitemap for project org-site:main]]
-- routes
-  - [[file:routes/recoffery.org][Recoffery]]

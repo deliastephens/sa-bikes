@@ -1,7 +1,0 @@
-#+Title: Rides
-* Monday
-* Tuesday
-* Wednesday
-* Thursday
-* Friday
-* Saturday
