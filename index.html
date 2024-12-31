@@ -1,56 +1,136 @@
-<div id="map" style="height: 500px; width: 100%;"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPX Map Viewer</title>
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: "AIzaSyCUiRpbH1YnuO96AiTAj2xlsYRTtUhSrjQ",
+        v: "weekly",
+        // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+        // Add other bootstrap parameters as needed, using camel case.
+  });
+  </script>
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+    #gpx-list {
+      margin-top: 10px;
+    }
+    .gpx-item {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
 
-<script>
-  function loadGPX(file) {
-    fetch(file)
-      .then(response => response.text())
-      .then(gpxText => {
-          const parser = new DOMParser();
-          const gpx = parser.parseFromString(gpxText, "application/xml");
-          const coordinates = [];
-          const bounds = new google.maps.LatLngBounds();
-          const trackpoints = gpx.querySelectorAll("trkpt");
+<body>
+  <div id="map"></div>
+  <div id="gpx-list">
+    <div class="gpx-item" data-file="route1.gpx">File 1</div>
+    <div class="gpx-item" data-file="bad_idea.gpx">File 2</div>
+  </div>
 
-          trackpoints.forEach(point => {
-              const lat = parseFloat(point.getAttribute("lat"));
-              const lon = parseFloat(point.getAttribute("lon"));
-              const latLng = { lat, lng: lon};
-              
-              coordinates.push(latLng);
+  <script>
+    let map;
+    let polylines;
+    let bounds;
+    polylines = new Map(); // To store polyline references by GPX file name
 
-              bounds.extend(latLng);
-          });
+    async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps")
+        const { LatLngBounds } = await google.maps.importLibrary("core") 
+        
+        map = new Map(document.getElementById("map"), {
+            center: { lat: 0, lng: 0 }, // Default center
+            zoom: 2, // Default zoom
+        });
+        
+        bounds = new LatLngBounds();
 
-          // Add a line on the map
-          const polyline = new google.maps.Polyline({
-              path: coordinates,
-              geodesic: true,
-              strokeColor: "#FF0000",
-              strokeOpacity: 1.0,
-              strokeWeight: 2,
-          });
-          polyline.setMap(map);
-
-          // Adjust map to fit bounds of GPX data
-          map.fitBounds(bounds);
+      // Attach click event handlers to GPX file items
+      document.querySelectorAll(".gpx-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const file = item.getAttribute("data-file");
+          toggleGPX(file, item);
+        });
       });
-  }
+    }
 
-  // Initialize the map
-  let map;
-  function initMap() {
-      map = new google.maps.Map(document.getElementById("map"), {
-          center: { lat: 29.4241, lng: -98.4936 }, // Coordinates for San Antonio
-          zoom: 12, // Adjust zoom level for a closer view
-      });
-      // Load your GPX file here (e.g., "path/to/file.gpx")
-      loadGPX("route1.gpx");
-  }
-</script>
+    function toggleGPX(file, element) {
+        if (polylines.has(file)) {
+            // Remove GPX from map
+            const polyline = polylines.get(file);
+            polyline.setMap(null);
+            polylines.delete(file);
+            element.style.color = "blue"; // Reset style for deselection
+            updateBounds(); // Update map bounds
+        } else {
+            // Load and add GPX to map
+            loadGPX(file, element);
+        }
+    }
 
-</div>
+    function loadGPX(file, element) {
+        fetch(file)
+            .then(response => response.text())
+            .then(gpxText => {
+                const parser = new DOMParser();
+                const gpx = parser.parseFromString(gpxText, "application/xml");
+                const coordinates = [];
+                const trackpoints = gpx.querySelectorAll("trkpt");
 
+                trackpoints.forEach(point => {
+                    const lat = parseFloat(point.getAttribute("lat"));
+                    const lon = parseFloat(point.getAttribute("lon"));
+                    const latLng = { lat, lng: lon };
+                    coordinates.push(latLng);
+                    bounds.extend(latLng); // Expand bounds for new points
+                });
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJcz1zNUZNli5Ck8jECM3nPvAv-Sn9I2w&callback=initMap" async defer></script>
+                // Create and display polyline
+                const polyline = new google.maps.Polyline({
+                    path: coordinates,
+                    geodesic: true,
+                    strokeColor: getRandomColor(), // Random color for each GPX file
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                });
+                polyline.setMap(map);
+
+                // Store polyline reference and update style
+                polylines.set(file, polyline);
+                element.style.color = "green"; // Change style to indicate selection
+
+                // Adjust map bounds
+                map.fitBounds(bounds);
+            });
+    }
+
+    function updateBounds() {
+        // Reset bounds and recalculate from visible polylines
+        bounds.empty();
+        polylines.forEach(polyline => {
+            polyline.getPath().forEach(point => bounds.extend(point));
+        });
+        if (!bounds.isEmpty()) {
+            map.fitBounds(bounds);
+        }
+    }
+
+    function getRandomColor() {
+        return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    }
+
+    initMap();
+  </script>
+</body>
+</html>
+
 
   
