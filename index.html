@@ -1,1 +1,56 @@
-<p>
+<div id="map" style="height: 500px; width: 100%;"></div>
+
+<script>
+  function loadGPX(file) {
+    fetch(file)
+      .then(response => response.text())
+      .then(gpxText => {
+          const parser = new DOMParser();
+          const gpx = parser.parseFromString(gpxText, "application/xml");
+          const coordinates = [];
+          const bounds = new google.maps.LatLngBounds();
+          const trackpoints = gpx.querySelectorAll("trkpt");
+
+          trackpoints.forEach(point => {
+              const lat = parseFloat(point.getAttribute("lat"));
+              const lon = parseFloat(point.getAttribute("lon"));
+              const latLng = { lat, lng: lon};
+              
+              coordinates.push(latLng);
+
+              bounds.extend(latLng);
+          });
+
+          // Add a line on the map
+          const polyline = new google.maps.Polyline({
+              path: coordinates,
+              geodesic: true,
+              strokeColor: "#FF0000",
+              strokeOpacity: 1.0,
+              strokeWeight: 2,
+          });
+          polyline.setMap(map);
+
+          // Adjust map to fit bounds of GPX data
+          map.fitBounds(bounds);
+      });
+  }
+
+  // Initialize the map
+  let map;
+  function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 29.4241, lng: -98.4936 }, // Coordinates for San Antonio
+          zoom: 12, // Adjust zoom level for a closer view
+      });
+      // Load your GPX file here (e.g., "path/to/file.gpx")
+      loadGPX("route1.gpx");
+  }
+</script>
+
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJcz1zNUZNli5Ck8jECM3nPvAv-Sn9I2w&callback=initMap" async defer></script>
+
+  
