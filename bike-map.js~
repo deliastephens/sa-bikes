@@ -1,0 +1,91 @@
+    let map;
+    let polylines;
+    let bounds;
+    polylines = new Map(); // To store polyline references by GPX file name
+
+    async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps")
+        const { LatLngBounds } = await google.maps.importLibrary("core") 
+        
+        map = new Map(document.getElementById("map"), {
+            center: { lat: 0, lng: 0 }, // Default center
+            zoom: 2, // Default zoom
+        });
+        
+        bounds = new LatLngBounds();
+
+      // Attach click event handlers to GPX file items
+      document.querySelectorAll(".gpx-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const file = item.getAttribute("data-file");
+          toggleGPX(file, item);
+        });
+      });
+    }
+
+    function toggleGPX(file, element) {
+        if (polylines.has(file)) {
+            // Remove GPX from map
+            const polyline = polylines.get(file);
+            polyline.setMap(null);
+            polylines.delete(file);
+            element.style.color = "blue"; // Reset style for deselection
+            updateBounds(); // Update map bounds
+        } else {
+            // Load and add GPX to map
+            loadGPX(file, element);
+        }
+    }
+
+    function loadGPX(file, element) {
+        fetch(file)
+            .then(response => response.text())
+            .then(gpxText => {
+                const parser = new DOMParser();
+                const gpx = parser.parseFromString(gpxText, "application/xml");
+                const coordinates = [];
+                const trackpoints = gpx.querySelectorAll("trkpt");
+
+                trackpoints.forEach(point => {
+                    const lat = parseFloat(point.getAttribute("lat"));
+                    const lon = parseFloat(point.getAttribute("lon"));
+                    const latLng = { lat, lng: lon };
+                    coordinates.push(latLng);
+                    bounds.extend(latLng); // Expand bounds for new points
+                });
+
+                // Create and display polyline
+                const polyline = new google.maps.Polyline({
+                    path: coordinates,
+                    geodesic: true,
+                    strokeColor: getRandomColor(), // Random color for each GPX file
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                });
+                polyline.setMap(map);
+
+                // Store polyline reference and update style
+                polylines.set(file, polyline);
+                element.style.color = "green"; // Change style to indicate selection
+
+                // Adjust map bounds
+                map.fitBounds(bounds);
+            });
+    }
+
+    function updateBounds() {
+        // Reset bounds and recalculate from visible polylines
+        bounds.empty();
+        polylines.forEach(polyline => {
+            polyline.getPath().forEach(point => bounds.extend(point));
+        });
+        if (!bounds.isEmpty()) {
+            map.fitBounds(bounds);
+        }
+    }
+
+    function getRandomColor() {
+        return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    }
+
+    initMap();

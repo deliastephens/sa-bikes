@@ -4,131 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GPX Map Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  
   <script>
     (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
         key: "AIzaSyCUiRpbH1YnuO96AiTAj2xlsYRTtUhSrjQ",
         v: "weekly",
-        // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
-        // Add other bootstrap parameters as needed, using camel case.
   });
   </script>
-  <style>
-    #map {
-      height: 500px;
-      width: 100%;
-    }
-    #gpx-list {
-      margin-top: 10px;
-    }
-    .gpx-item {
-      cursor: pointer;
-      color: blue;
-      text-decoration: underline;
-      margin-bottom: 5px;
-    }
-  </style>
 </head>
 
 <body>
-  <div id="map"></div>
-  <div id="gpx-list">
-    <div class="gpx-item" data-file="route1.gpx">File 1</div>
-    <div class="gpx-item" data-file="bad_idea.gpx">File 2</div>
+  <div id="main-container">
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+    <div id="gpx-list">
+      <div class="route-type">
+        <h2 class="route-type-title">Down South</h2>
+        <details class="gpx-card" data-file="to_the_t.gpx">
+          <summary class="gpx-title">To the T (32 mi)</summary>
+          <div class="gpx-description">
+            A classic route that goes down towards the "T"-shaped intersection between Southon and Elmendorf. Start at the Mila Make Ready Location. Stops available at the Valero or Shell on Southon ~18 miles in.
+          </div>
+        </details>
+        
+        <details class="gpx-card" data-file="elmendorf_ccw.gpx">
+          <summary class="gpx-title">Elmendorf Loop (38 mi)</summary>
+          <div class="gpx-description">
+            Like the T, but longer. Does a counter-clockwise loop around the town of Elmendorf. Start at the Mila Make Ready Location. Stops available at the Valero or Shell on Southon ~18 miles in.
+          </div>
+        </details>
+
+        <details class="gpx-card" data-file="southern_century.gpx">
+          <summary class="gpx-title">Southern Century (100 mi)</summary>
+          <div class="gpx-description">
+            A century which goes down south before heading east to La Vernia and back into town. Stops available approximately every 30 miles, starting with the Graytown gas station. Please use their restrooms; don't pee outside of the gas station. The next stop is in floresville, then Sutherland Springs, then La Vernia, and then the Four Points stop just outside of St. Hedwig.
+          </div>
+        </details>
+
+        <details class="gpx-card" data-file="sandy_oaks.gpx">
+          <summary class="gpx-title">Sandy Oaks (53 miles) </summary>
+          <div class="gpx-description">
+            Starting at the Make Ready Mila, head south on Southton to Elmendorf. Hop on the Anderson Loop briefly before heading to Sandy Oaks and making a return on Blue Wing. Beware of dogs on Blue Wing Road! Stops available at the Shell (Southton/I-37 intersection, mile 18) and Sandy Oaks (~mi. 35). 
+          </div>
+        </details>
+
+        
+      </div>
+
+      <div class="route-type">
+        <h2 class="route-type-title">Questlike</h2>
+        <details class="gpx-card" data-file="bad_idea.gpx">
+          <summary class="gpx-title">Bad Idea (206.5 mi)</summary>
+          <div class="gpx-description">
+            A 200-mile joyride that hits up the very best of Central Texas cycling. Stops available at New Braunfels, the Feed Store in Blanco, Fredericksburg, Boerne, and anywhere inside 1604. The sections on Nacogdoches out to NB, 306 by Canyon lake, and the return on Blanco are a little traffic-heavy, so this route is best done on the weekend and started early before traffic gets too bad. 
+          </div>
+        </details>
+        
+        <details class="gpx-card" data-file="satx_to_atx.gpx">
+          <summary class="gpx-title">SATX -> ATX (99.6 mi)</summary>
+          <div class="gpx-description">
+            A lovely century between San Antonio and Austin. Starting at Mila on Broadway, head north to Canyon Lake and then push onto Austin. If you'd like, you can also go up to New Braunfels before heading west to Canyon Lake. Stops available along the way. The sections on S 1st and S Congress in Austin are definitely more trafficy than is ideal, so stay aware. 
+          </div>
+        </details>
+        
+      </div>
+    </div>
   </div>
 
-  <script>
-    let map;
-    let polylines;
-    let bounds;
-    polylines = new Map(); // To store polyline references by GPX file name
+  <footer class="site-footer">
+    <p>
+      <strong>Disclaimer:</strong> Riding a bicycle is inherently dangerous. By using these routes, you acknowledge that you do so at your own risk. The creator of this site cannot be held liable for any accidents, injuries, or damages that may occur while following these routes.
+    </p>
+  </footer>
 
-    async function initMap() {
-        const { Map } = await google.maps.importLibrary("maps")
-        const { LatLngBounds } = await google.maps.importLibrary("core") 
-        
-        map = new Map(document.getElementById("map"), {
-            center: { lat: 0, lng: 0 }, // Default center
-            zoom: 2, // Default zoom
-        });
-        
-        bounds = new LatLngBounds();
-
-      // Attach click event handlers to GPX file items
-      document.querySelectorAll(".gpx-item").forEach(item => {
-        item.addEventListener("click", () => {
-          const file = item.getAttribute("data-file");
-          toggleGPX(file, item);
-        });
-      });
-    }
-
-    function toggleGPX(file, element) {
-        if (polylines.has(file)) {
-            // Remove GPX from map
-            const polyline = polylines.get(file);
-            polyline.setMap(null);
-            polylines.delete(file);
-            element.style.color = "blue"; // Reset style for deselection
-            updateBounds(); // Update map bounds
-        } else {
-            // Load and add GPX to map
-            loadGPX(file, element);
-        }
-    }
-
-    function loadGPX(file, element) {
-        fetch(file)
-            .then(response => response.text())
-            .then(gpxText => {
-                const parser = new DOMParser();
-                const gpx = parser.parseFromString(gpxText, "application/xml");
-                const coordinates = [];
-                const trackpoints = gpx.querySelectorAll("trkpt");
-
-                trackpoints.forEach(point => {
-                    const lat = parseFloat(point.getAttribute("lat"));
-                    const lon = parseFloat(point.getAttribute("lon"));
-                    const latLng = { lat, lng: lon };
-                    coordinates.push(latLng);
-                    bounds.extend(latLng); // Expand bounds for new points
-                });
-
-                // Create and display polyline
-                const polyline = new google.maps.Polyline({
-                    path: coordinates,
-                    geodesic: true,
-                    strokeColor: getRandomColor(), // Random color for each GPX file
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2,
-                });
-                polyline.setMap(map);
-
-                // Store polyline reference and update style
-                polylines.set(file, polyline);
-                element.style.color = "green"; // Change style to indicate selection
-
-                // Adjust map bounds
-                map.fitBounds(bounds);
-            });
-    }
-
-    function updateBounds() {
-        // Reset bounds and recalculate from visible polylines
-        bounds.empty();
-        polylines.forEach(polyline => {
-            polyline.getPath().forEach(point => bounds.extend(point));
-        });
-        if (!bounds.isEmpty()) {
-            map.fitBounds(bounds);
-        }
-    }
-
-    function getRandomColor() {
-        return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-    }
-
-    initMap();
-  </script>
+  <script src="bike-map.js"></script>
 </body>
 </html>
 

@@ -1,0 +1,13 @@
+    #map {
+      height: 500px;
+      width: 80%;
+    }
+    #gpx-list {
+      margin-top: 10px;
+    }
+    .gpx-item {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+      margin-bottom: 5px;
+    }
