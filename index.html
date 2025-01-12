@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPX Map Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: "AIzaSyAj8O0EwxdKRvDqKE9ZGwCdIza2NVY-bhg",
+        v: "weekly",
+  });
+  </script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-content">
+        <div class="site-title">San Antonio Bike Routes</div>
+        <nav class="site-nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="groups.html" class="nav-link">Groups</a>
+        </nav>
+    </div>
+  </header>
+  
+  <div id="main-container">
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+    <div id="gpx-list">
+      <div class="route-type">
+        <h2 class="route-type-title">Down South</h2>
+        <details class="gpx-card" data-file="to_the_t.gpx">
+          <summary class="gpx-title">To the T (32 mi)</summary>
+          <div class="gpx-description">
+            A classic route that goes down towards the "T"-shaped intersection between Southon and Elmendorf. Start at the Mila Make Ready Location. Stops available at the Valero or Shell on Southon ~18 miles in. <a href="https://www.strava.com/routes/3309301642544444948">Strava Link</a>
+          </div>
+        </details>
+        
+        <details class="gpx-card" data-file="elmendorf_ccw.gpx">
+          <summary class="gpx-title">Elmendorf Loop (38 mi)</summary>
+          <div class="gpx-description">
+            Like the T, but longer. Does a counter-clockwise loop around the town of Elmendorf. Start at the Mila Make Ready Location. Stops available at the Valero or Shell on Southon ~18 miles in. <a href="https://www.strava.com/routes/3309301642544444948">Strava Link</a>
+          </div>
+        </details>
+
+        <details class="gpx-card" data-file="southern_century.gpx">
+          <summary class="gpx-title">Southern Century (100 mi)</summary>
+          <div class="gpx-description">
+            A century which goes down south before heading east to La Vernia and back into town. Stops available approximately every 30 miles, starting with the Graytown gas station. Please use their restrooms; don't pee outside of the gas station. The next stop is in floresville, then Sutherland Springs, then La Vernia, and then the Four Points stop just outside of St. Hedwig.  <a href="https://www.strava.com/routes/3308945179302962262">Strava Link</a>
+          </div>
+        </details>
+
+        <details class="gpx-card" data-file="sandy_oaks.gpx">
+          <summary class="gpx-title">Sandy Oaks (53 miles) </summary>
+          <div class="gpx-description">
+            Starting at the Make Ready Mila, head south on Southton to Elmendorf. Hop on the Anderson Loop briefly before heading to Sandy Oaks and making a return on Blue Wing. Beware of dogs on Blue Wing Road! Stops available at the Shell (Southton/I-37 intersection, mile 18) and Sandy Oaks (~mi. 35). <a href="https://www.strava.com/routes/3310299819411780854">Strava Link</a>
+          </div>
+        </details>
+
+        <details class="gpx-card" data-file="sandy_oaks.gpx">
+          <summary class="gpx-title">Fake Race (40 miles) </summary>
+          <div class="gpx-description">
+            Starting at the Make Ready Mila, head south on Southton to the Shell. Do a loop, watch out for wild dogs, and go all the way back on Presa. A Sunday classic! <a href="https://www.strava.com/routes/3310732703123152724">Strava Link</a>
+          </div>
+        </details>
+
+        
+      </div>
+
+      <div class="route-type">
+        <h2 class="route-type-title">Questlike</h2>
+        <details class="gpx-card" data-file="bad_idea.gpx">
+          <summary class="gpx-title">Bad Idea (206.5 mi)</summary>
+          <div class="gpx-description">
+            A 200-mile joyride that hits up the very best of Central Texas cycling. Stops available at New Braunfels, the Feed Store in Blanco, Fredericksburg, Boerne, and anywhere inside 1604. The sections on Nacogdoches out to NB, 306 by Canyon lake, and the return on Blanco are a little traffic-heavy, so this route is best done on the weekend and started early before traffic gets too bad. <a href="https://www.strava.com/routes/3284603211126206630">Strava Link</a>
+          </div>
+        </details>
+        
+        <details class="gpx-card" data-file="satx_to_atx.gpx">
+          <summary class="gpx-title">SATX -> ATX (99.6 mi)</summary>
+          <div class="gpx-description">
+            A lovely century between San Antonio and Austin. Take the Amtrak on the way back (usually runs from Austin at about 6pm) for an excellent multi-modal transit day. Starting at Mila on Broadway, head north to Canyon Lake and then push onto Austin. If you'd like, you can also go up to New Braunfels before heading west to Canyon Lake. Stops available along the way. The sections on S 1st and S Congress in Austin are definitely more trafficy than is ideal, so stay aware. <a href="https://www.strava.com/routes/3309302802690749552">Strava Link</a>
+          </div>
+        </details>
+        
+      </div>
+
+            <div class="route-type">
+        <h2 class="route-type-title">Out-of-Towners</h2>
+        <details class="gpx-card" data-file="bad_idea.gpx">
+          <summary class="gpx-title">Gummy Bear (35 mi)</summary>
+          <div class="gpx-description">
+            Starting at a gas station on State Hwy 46, enjoy some lumpy roads just north of San Antonio. Bonus climb to Canyon Lake, if you're feeling brave. Stop available in Sattler, about halfway through the ride. <a href="https://www.strava.com/routes/3247191570460250184">Strava Link</a>
+          </div>
+        </details>
+        
+        <details class="gpx-card" data-file="satx_to_atx.gpx">
+          <summary class="gpx-title">Bullis, Blanco, and Bulverde (60 mi)</summary>
+          <div class="gpx-description">
+            Courtesy of Spectra Racing, start at Bullis County Park and head out on some hilly roads to Boerne. Enjoy a pastry at Bear Moon Bakery & Cafe, slightly off the route, before heading to Bulverede and back to Bullis. There is a stop available at Luke's County Mart in Bulverde, but it's slightly off the route as well. <a href="https://www.strava.com/routes/3231033823459206410">Strava Link</a>
+          </div>
+        </details>
+        
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p> Made with ❤️ in <strong> San Antonio </strong> </p>
+    <div class="disclaimer">
+      <p>Cycling on public roads involves inherent risks. Always follow traffic laws, wear appropriate safety gear, and ride within your abilities. By using these routes, you acknowledge that you do so at your own risk. The creator of this site cannot be held liable for any accidents, injuries, or damages that may occur while following these routes.</p>
+      <p>The groups and routes listed on this site are provided for informational purposes only. The site author does not endorse any particular group and is not responsible for their activities or practices.</p>
+    </div>
+  </footer>
+
+  <script src="bike-map.js"></script>
+</body>
+</html>
+
+
+  

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Antonio Cycling Groups</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-content">
+        <div class="site-title">SA Bike Routes</div>
+        <nav class="site-nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="groups.html" class="nav-link">Groups</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main-container">
+      <h1>Local Cycling Groups</h1>
+      
+      <div class="groups-content">
+        <p>
+          <span class="group-name">Friends With Bikes</span> - 
+          <a href="group-url-here">Visit Group</a>. 
+          Description of the group goes here. Talk about their usual meeting times, 
+          typical ride distances, and general vibe of the group.
+        </p>
+
+        <p>
+          <span class="group-name">Chain Reaction San Antonio</span> - 
+          <a href="group-url-here">Visit Group</a>. 
+          Another description here. You can mention if they're more casual or competitive, if they're beginner-friendly, and any special events they organize.
+        </p>
+
+        <p>
+          <span class="group-name">Mujeres Cycling</span> - 
+          <a href="group-url-here">Visit Group</a>. 
+          Another description here. You can mention if they're more casual or competitive, if they're beginner-friendly, and any special events they organize.
+        </p>
+
+        <p>
+          <span class="group-name">Babes with Bikes</span> - 
+          <a href="group-url-here">Visit Group</a>. 
+          Another description here. You can mention if they're more casual or competitive, if they're beginner-friendly, and any special events they organize.
+        </p>
+
+        <p>
+          <span class="group-name">210 Cycle Riderz</span> - 
+          <a href="https://www.instagram.com/210_cycleriderz/">Visit Group</a>. 
+          Another description here. You can mention if they're more casual or competitive, if they're beginner-friendly, and any special events they organize.
+        </p>
+
+        <p>
+          <span class="group-name">Team Taco Cycling</span> - 
+          <a href="">Visit Group</a>. 
+          Another description here. You can mention if they're more casual or competitive, if they're beginner-friendly, and any special events they organize.
+        </p>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <p>Made with ❤️ in <strong>San Antonio</strong></p>
+    </footer>
+  </body>
+</html>
